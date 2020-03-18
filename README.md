@@ -17,10 +17,12 @@ The project content :
   
   ° Materials with the example values
   
-  
+   
 So, feel free to use the code, modify it, optimize it, break it, do whatever you want; I hope this could be usefull for anyone is trying to recreate a such amazing effect in this darkest time working from home. You can share with me what have you done, I will be very happy to see your works!
 
+You will find more info in https://www.artstation.com/eavillar 
 Enjoy and stay safe!
 
 
 PS. I will try to add a shaderGraph file soon in the project! So stay tunned!
+
