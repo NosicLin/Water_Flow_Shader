@@ -1,11 +1,22 @@
 # Water_Flow_Shader
 #StayatHome #YomequedoenCasa
 
-While everyone is stuck at home (including me) I've got created FREE project files for you to play with in your games workflows or whatever.
 
-I've used this shader in a few projects, the scene shows in the video is from Barbie Explore AR-VR mobile app I worked a few months ago.
 
-The project in this GIT was created in UNITY3D (2018.3.7f1) to show how the flow map is used to recreate a awesome flowing water wiht some basics steps. 
+	While everyone is stuck at home (including me) I've got created this simple project
+where you can use it or combine with your projects, game workflows etc.
+
+	I've used this shader before in my  lastests projects, ais very simple and light shader
+very compatible with low generations mobiles platforms.
+
+You will need is a quad, some textures and realese your creativity.
+
+Try to experiment what color do in your texture, maybe you will find a perfect formula
+of colors and achive an amazing river flowing effect or a black hole draining everything
+around.
+
+The project in this GIT was created in UNITY3D (2019.2.8f1) to show how the flow map is used
+to recreate a awesome flowing water wiht some basics steps. 
 
 The project content :
 
@@ -18,11 +29,17 @@ The project content :
   ° Materials with the example values
   
    
-So, feel free to use the code, modify it, optimize it, break it, do whatever you want; I hope this could be usefull for anyone is trying to recreate a such amazing effect in this darkest time working from home. You can share with me what have you done, I will be very happy to see your works!
+So, feel free to use the code, modify it, optimize it, break it, do whatever you want; I hope this 
+could be usefull for anyone is trying to recreate a such amazing effect in this darkest time working
+rom home. You can share with me what have you done, I will be very happy to see your works!
+
+If you want invite me a virtual COFFEE : https://www.buymeacoffee.com/tlq6LXo
 
 You will find more info in https://www.artstation.com/eavillar 
+
+
 Enjoy and stay safe!
 
 
-PS. I will try to add a shaderGraph file soon in the project! So stay tunned!
+
 

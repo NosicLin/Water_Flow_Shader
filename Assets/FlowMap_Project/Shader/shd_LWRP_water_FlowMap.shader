@@ -52,9 +52,10 @@ Shader "FX/LWRP/Water Flow Map" {
             {
                 half4  vertex : SV_POSITION;
                 half2  uv : TEXCOORD0;
-                half3 normalDir : TEXCOORD1;
-                half3	TtoV0 : TEXCOORD2;
-				half3	TtoV1 : TEXCOORD3;
+                half2  uv_matcap : TEXCOORD1;
+                half3 normalDir : TEXCOORD2;
+                half3	TtoV0 : TEXCOORD3;
+				half3	TtoV1 : TEXCOORD4;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
  
@@ -63,7 +64,7 @@ Shader "FX/LWRP/Water Flow Map" {
             TEXTURE2D(_MatCap);
             TEXTURE2D(_WaterNormal);
             float _Speed, _AlphaInt, _RimInt;
-            half4 _WaterTex_ST,  _colorWater, _MainTex_ST;
+            half4 _WaterTex_ST,  _colorWater, _MainTex_ST, _MatCap_ST;
             SamplerState sampler_WaterTex, sampler_FlowMap, sampler_MatCap, sampler_WaterNormal;
  
             v2f vert(appdata v) {
@@ -72,13 +73,14 @@ Shader "FX/LWRP/Water Flow Map" {
                 UNITY_SETUP_INSTANCE_ID(i);
                 UNITY_TRANSFER_INSTANCE_ID(i, o);
                 o.uv = TRANSFORM_TEX(v.uv, _WaterTex);
+                o.uv_matcap = TRANSFORM_TEX(v.uv, _MatCap);
 
                 //MatCap Normals Section
                 half3 worldNormal = mul(UNITY_MATRIX_MV, float4((v.normal.xyz),0));
 				half4 worldTangent =  mul(UNITY_MATRIX_MV, float4((v.tangent.xyz),0));
 				half3 worldBinormal = cross(worldNormal.xyz, worldTangent.xyz) * v.tangent.y;
-				o.TtoV0 = half3(worldTangent.x, worldBinormal.x, worldNormal.x);
-				o.TtoV1 = half3(worldTangent.y, worldBinormal.y, worldNormal.y);
+				o.TtoV0 = half3(worldTangent.x, worldTangent.x, worldTangent.x);
+				o.TtoV1 = half3(worldTangent.y, worldTangent.y, worldTangent.y);
 
                 o.normalDir = mul(UNITY_MATRIX_MV, float4((v.normal.xyz),0));
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(float3(v.vertex.x, v.vertex.y, v.vertex.z));
@@ -100,7 +102,7 @@ Shader "FX/LWRP/Water Flow Map" {
                 half3 normalsOut = lerp(normals, normals2, lerpVal);
 				vn.x = dot(i.TtoV0, normalsOut + flowVal.x);
 				vn.y = dot(i.TtoV1, normalsOut + flowVal.y);
-				half4 MatcapDir  = SAMPLE_TEXTURE2D(_MatCap, sampler_MatCap, half2((i.uv.y)+(vn.x*0.5 + 0.5),i.uv.x+(vn.x*0.5 + 0.5))+ flowVal.xy * 1.5);
+				half4 MatcapDir  = SAMPLE_TEXTURE2D(_MatCap, sampler_MatCap, half2((i.uv_matcap.y)+(vn.x*0.5 + 0.5),i.uv_matcap.x+(vn.x*0.5 + 0.5))+ flowVal.xy * 1.5);
 
                 //Color Texture + Flow Map
                 half4 col1 = SAMPLE_TEXTURE2D(_WaterTex, sampler_WaterTex, (i.uv + flowVal.xy )* dif1);

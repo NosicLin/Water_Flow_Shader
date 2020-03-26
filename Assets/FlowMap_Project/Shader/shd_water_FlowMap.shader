@@ -41,25 +41,32 @@ Shader "FX/Water Flow Map" {
             struct v2f {
                 fixed4  pos : SV_POSITION;
                 fixed2  uv : TEXCOORD0;
+                fixed2	uv_matcap : TEXCOORD1;
                 half3	TtoV0 : TEXCOORD2;
 				half3	TtoV1 : TEXCOORD3;
+				half3	n : TEXCOORD4;
             };
  
             sampler2D  _WaterTex, _FlowMap, _MatCap, _WaterNormal;
             float _Speed,  _AlphaInt, _RimInt;
-            fixed4 _WaterTex_ST,  _colorWater, _MainTex_ST;
+            fixed4 _WaterTex_ST,  _colorWater, _MainTex_ST, _MatCap_ST;
  
             v2f vert(appdata v) {
                 v2f o;
                 o.uv = TRANSFORM_TEX(v.uv, _WaterTex);
+                o.uv_matcap = TRANSFORM_TEX(v.uv, _MatCap);
 
                 //MatCap Normals Section
                 fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
 				fixed3 worldTangent = UnityObjectToWorldDir(v.tangent);
 				fixed3 worldBinormal = cross(worldNormal.xyz, worldTangent.xyz) * v.tangent.y;
-				o.TtoV0 = fixed3(worldTangent.x, worldBinormal.x, worldNormal.x);
-				o.TtoV1 = fixed3(worldTangent.y, worldBinormal.y, worldNormal.y);
-
+				//o.TtoV0 = fixed3(worldTangent.x, worldBinormal.x, worldNormal.x);
+				//o.TtoV1 = fixed3(worldTangent.y, worldBinormal.y, worldNormal.y);
+					
+                    TANGENT_SPACE_ROTATION;
+					o.n = mul(rotation, v.normal);
+					o.TtoV0 = mul(rotation, UNITY_MATRIX_IT_MV[0].xyz);
+					o.TtoV1 = mul(rotation, UNITY_MATRIX_IT_MV[1].xyz);
 
                 o.pos = UnityObjectToClipPos(v.vertex);
                 return o;
@@ -79,7 +86,7 @@ Shader "FX/Water Flow Map" {
                 half3 normalsOut = lerp(normals, normals2, lerpVal);
 				vn.x = dot(i.TtoV0, normalsOut + flowVal.x);
 				vn.y = dot(i.TtoV1, normalsOut + flowVal.y);
-				fixed4 MatcapDir  = tex2D(_MatCap, fixed2((i.uv.y)+(vn.x*0.5 + 0.5),i.uv.x+(vn.x*0.5 + 0.5))+ flowVal.xy * 1.5);
+				fixed4 MatcapDir  = tex2D(_MatCap, fixed2((i.uv_matcap.y)+(vn.x*0.5 + 0.5),i.uv_matcap.x+(vn.x*0.5 + 0.5))+ flowVal.xy * 1.5);
 
                 //Color Texture + Flow Map
                 fixed4 col1 = tex2D(_WaterTex, (i.uv + flowVal.xy )* dif1);
